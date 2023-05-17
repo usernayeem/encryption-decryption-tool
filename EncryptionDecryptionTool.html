@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="images/clipboard-icon.svg"
+      type="image/x-icon"
+    />
+    <title>Encryption Decryption Tool</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 62.5%;
+      }
+
+      body {
+        background: #202024;
+        overflow-x: hidden;
+      }
+
+      .container {
+        scroll-snap-type: y mandatory;
+        overflow-y: scroll;
+        height: 100vh;
+      }
+
+      section {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        scroll-snap-align: start;
+      }
+
+      .card {
+        width: 25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 1rem;
+        background: #202124;
+        box-shadow: 0 0.7rem 3rem rgba(15, 15, 15, 1);
+      }
+
+      .textarea-one,
+      .textarea-two {
+        resize: none;
+        margin: 1rem 0 1rem 0;
+        color: white;
+        background: rgba(255, 255, 255, 0.01);
+        border-radius: 0.5rem;
+        box-shadow: 0 0.4rem 3rem rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
+        border: 0.1rem solid white;
+        padding: 0.5rem;
+        outline: none;
+      }
+
+      .textarea-one {
+        margin-top: -0.2rem;
+      }
+
+      button {
+        position: relative;
+        width: 11em;
+        height: 2em;
+        outline: none;
+        transition: 0.1s;
+        background-color: transparent;
+        border: none;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #ddebf0;
+        cursor: pointer;
+      }
+
+      #clip {
+        --color: #aa77ff;
+        position: absolute;
+        top: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        border: 0.5rem double var(--color);
+        box-shadow: inset 0 0 1.5rem #195480;
+        -webkit-clip-path: polygon(
+          30% 0%,
+          70% 0%,
+          100% 30%,
+          100% 70%,
+          70% 100%,
+          30% 100%,
+          0% 70%,
+          0% 30%
+        );
+      }
+
+      .arrow {
+        position: absolute;
+        transition: 0.2s;
+        background-color: #aa77ff;
+        top: 35%;
+        width: 11%;
+        height: 30%;
+      }
+
+      #leftArrow {
+        left: -13.5%;
+        -webkit-clip-path: polygon(100% 0, 100% 100%, 0 50%);
+      }
+
+      #rightArrow {
+        -webkit-clip-path: polygon(100% 49%, 0 0, 0 100%);
+        left: 102%;
+      }
+
+      button:hover #rightArrow {
+        background-color: #ff6d60;
+        left: -15%;
+        animation: 0.6s ease-in-out both infinite alternate rightArrow8;
+      }
+
+      button:hover #leftArrow {
+        background-color: #ff6d60;
+        left: 103%;
+        animation: 0.6s ease-in-out both infinite alternate leftArrow8;
+      }
+
+      .corner {
+        position: absolute;
+        width: 4em;
+        height: 4em;
+        background-color: #aa77ff;
+        box-shadow: inset 0.1rem 0.1rem 0.8rem #2781c3;
+        transform: scale(1) rotate(45deg);
+        transition: 0.2s;
+      }
+
+      #rightTop {
+        top: -1.98em;
+        left: 91%;
+      }
+
+      #leftTop {
+        top: -1.96em;
+        left: -3em;
+      }
+
+      #leftBottom {
+        top: 2.1em;
+        left: -2.15em;
+      }
+
+      #rightBottom {
+        top: 45%;
+        left: 88%;
+      }
+
+      button:hover #leftTop {
+        animation: 0.1s ease-in-out 0.05s both changeColor8,
+          0.2s linear 0.4s both lightEffect8;
+      }
+
+      button:hover #rightTop {
+        animation: 0.1s ease-in-out 0.15s both changeColor8,
+          0.2s linear 0.4s both lightEffect8;
+      }
+
+      button:hover #rightBottom {
+        animation: 0.1s ease-in-out 0.25s both changeColor8,
+          0.2s linear 0.4s both lightEffect8;
+      }
+
+      button:hover #leftBottom {
+        animation: 0.1s ease-in-out 0.35s both changeColor8,
+          0.2s linear 0.4s both lightEffect8;
+      }
+
+      button:hover .corner {
+        transform: scale(1.25) rotate(45deg);
+      }
+
+      button:hover #clip {
+        animation: 0.2s ease-in-out 0.55s both greenLight8;
+        --color: #ff6d60;
+      }
+
+      @keyframes changeColor8 {
+        from {
+          background-color: #2781c3;
+        }
+
+        to {
+          background-color: #ff6d60;
+        }
+      }
+
+      @keyframes lightEffect8 {
+        from {
+          box-shadow: 0.1rem 0.1rem 0.5rem #ff6d60;
+        }
+
+        to {
+          box-shadow: 0 0 0.2rem #ff6d60;
+        }
+      }
+
+      @keyframes greenLight8 {
+        from {
+        }
+
+        to {
+          box-shadow: inset 0px 0px 3.2rem #ff6d60;
+        }
+      }
+
+      @keyframes leftArrow8 {
+        from {
+          transform: translate(0rem);
+        }
+
+        to {
+          transform: translateX(1rem);
+        }
+      }
+
+      @keyframes rightArrow8 {
+        from {
+          transform: translate(0rem);
+        }
+
+        to {
+          transform: translateX(-1rem);
+        }
+      }
+
+      /* Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #aa77ff #ffffff;
+      }
+
+      /* Chrome, Edge and Safari */
+      *::-webkit-scrollbar {
+        width: 0.8rem;
+        width: 0.8rem;
+      }
+
+      *::-webkit-scrollbar-track {
+        border-radius: 0rem;
+        background-color: #ffffff;
+      }
+
+      *::-webkit-scrollbar-track:hover {
+        background-color: #ffffff;
+      }
+
+      *::-webkit-scrollbar-track:active {
+        background-color: #ffffff;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        border-radius: 0rem;
+        background-color: #aa77ff;
+      }
+
+      *::-webkit-scrollbar-thumb:hover {
+        background-color: #aa77ff;
+      }
+
+      *::-webkit-scrollbar-thumb:active {
+        background-color: #aa77ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <section>
+        <div class="card">
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+          <lottie-player
+            src="https://assets6.lottiefiles.com/packages/lf20_nrvbimrp.json"
+            background="transparent"
+            speed="1"
+            style="width: 50px; height: 50px"
+            loop
+            autoplay
+          ></lottie-player>
+          <textarea
+            class="textarea-one"
+            name=""
+            id="ent1"
+            cols="25"
+            rows="10"
+            placeholder="Encrypt your Message"
+          ></textarea>
+          <button onclick="encrypt()">
+            ENCRYPT
+            <div id="clip">
+              <div id="leftTop" class="corner"></div>
+              <div id="rightBottom" class="corner"></div>
+              <div id="rightTop" class="corner"></div>
+              <div id="leftBottom" class="corner"></div>
+            </div>
+            <span id="rightArrow" class="arrow"></span>
+            <span id="leftArrow" class="arrow"></span>
+          </button>
+          <textarea
+            class="textarea-two"
+            name=""
+            id="ent2"
+            cols="25"
+            rows="10"
+          ></textarea>
+        </div>
+      </section>
+      <section>
+        <div class="card">
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+          <lottie-player
+            src="https://assets6.lottiefiles.com/packages/lf20_nrvbimrp.json"
+            background="transparent"
+            speed="1"
+            style="width: 50px; height: 50px"
+            loop
+            autoplay
+          ></lottie-player>
+          <textarea
+            class="textarea-one"
+            name=""
+            id="det1"
+            cols="25"
+            rows="10"
+          ></textarea>
+          <button onclick="decrypt()">
+            DECRYPT
+            <div id="clip">
+              <div id="leftTop" class="corner"></div>
+              <div id="rightBottom" class="corner"></div>
+              <div id="rightTop" class="corner"></div>
+              <div id="leftBottom" class="corner"></div>
+            </div>
+            <span id="rightArrow" class="arrow"></span>
+            <span id="leftArrow" class="arrow"></span>
+          </button>
+          <textarea
+            class="textarea-two"
+            name=""
+            id="det2"
+            cols="25"
+            rows="10"
+          ></textarea>
+        </div>
+      </section>
+    </div>
+  </body>
+  <script>
+    function encrypt() {
+      const message = document.getElementById("ent1").value;
+      const replacements = {
+        a: "##nB",
+        b: "##VK",
+        c: "&.tK",
+        d: "@#sd",
+        e: "_-dP",
+        g: "@,Nt",
+        h: "=;KK",
+        i: "=;Nt",
+        j: "@%tJ",
+        k: "=-tJ",
+        m: "-!fc",
+        o: "-@kP",
+        p: "_=cc",
+        q: ";-fd",
+        r: "=-cD",
+        u: "@u.E",
+        w: "=.Sc",
+        x: "@!wQ",
+        y: "--mX",
+        z: "='ur",
+      };
+      let result = message;
+      for (const [key, value] of Object.entries(replacements)) {
+        result = result.replace(new RegExp(key, "g"), value);
+      }
+      document.getElementById("ent2").innerHTML = result;
+      setTimeout(() => alert("Scroll down to encrypt"), 1000);
+    }
+    function decrypt() {
+      const message = document.getElementById("det1").value;
+      const replacements = {
+        a: "##nB",
+        b: "##VK",
+        c: "&.tK",
+        d: "@#sd",
+        e: "_-dP",
+        g: "@,Nt",
+        h: "=;KK",
+        i: "=;Nt",
+        j: "@%tJ",
+        k: "=-tJ",
+        m: "-!fc",
+        o: "-@kP",
+        p: "_=cc",
+        q: ";-fd",
+        r: "=-cD",
+        u: "@u.E",
+        w: "=.Sc",
+        x: "@!wQ",
+        y: "--mX",
+        z: "='ur",
+      };
+      let result = message;
+      for (const [key, value] of Object.entries(replacements)) {
+        result = result.replace(new RegExp(value, "g"), key);
+      }
+      document.getElementById("det2").innerHTML = result;
+    }
+  </script>
+</html>
