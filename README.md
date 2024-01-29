@@ -4,15 +4,15 @@ Responsive web application.
 
 ## Authors
 
-- [@md5nayeem](https://www.github.com/md5nayeem)
+- [Md Nayeem](https://www.github.com/usernayeem)
 
 ## Live Preview
 
-https://md5nayeem.github.io/encryption_decryption_tool/
+https://usernayeem.github.io/encryption_decryption_tool/
 
 ## Feedback
 
-If you have any feedback, please reach out to me at https://www.linkedin.com/in/md5nayeem/
+If you have any feedback, please reach out to me at https://www.linkedin.com/in/usernayeem/
 
 ## License
 
