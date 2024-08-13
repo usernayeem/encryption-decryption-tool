@@ -1,6 +1,6 @@
-# Encryption Decryption Tool
+# Text Encryption Decryption
 
-Responsive web application.
+Responsive text encryption decryption web application.
 
 ## Authors
 
@@ -8,7 +8,7 @@ Responsive web application.
 
 ## Live Preview
 
-https://usernayeem.github.io/encryption_decryption_tool/
+https://usernayeem.github.io/text-encryption-decryption/
 
 ## Feedback
 
